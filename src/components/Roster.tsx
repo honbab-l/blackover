@@ -16,10 +16,10 @@ export default function Roster({ team }: { team: string }) {
   return (
     <div className="pb-12">
       <header className="border-b border-gray-800 pb-6 mb-8">
-        <h2 className={`text-3xl font-bold tracking-widest ${textColor} hover-glitch font-display`} data-text={`${team} TEAM`}>
+        <h2 className={`text-2xl md:text-3xl font-bold tracking-widest ${textColor} hover-glitch font-display`} data-text={`${team} TEAM`}>
           {team} TEAM
         </h2>
-        <p className="text-gray-500 font-mono text-sm mt-1 hover-glitch">AUTHORIZED PERSONNEL ONLY // LEVEL 5 CLEARANCE REQUIRED</p>
+        <p className="text-gray-500 font-mono text-[10px] md:text-sm mt-1 hover-glitch uppercase">Authorized Personnel Only // Level 5 Clearance Required</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -126,7 +126,7 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
               </div>
 
               <div className="border-b-2 border-gray-700 pb-2 mb-4 relative z-10">
-                <h2 className="text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text={agent.name}>{agent.name}</h2>
+                <h2 className="text-2xl md:text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text={agent.name}>{agent.name}</h2>
               </div>
               
               <div className="grid grid-cols-1 gap-2 text-sm font-mono relative z-10">
@@ -231,10 +231,10 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
 
 function InfoRow({ label, value, textColor = "text-gray-200", onClick }: { label: string, value: string, textColor?: string, onClick?: () => void }) {
   return (
-    <div className="flex border-b border-gray-800/50 py-1 hover:bg-gray-900/30 transition-colors">
-      <div className="w-32 text-gray-500">{label}</div>
+    <div className="flex border-b border-gray-800/50 py-1 hover:bg-gray-900/30 transition-colors text-[10px] md:text-sm">
+      <div className="w-24 md:w-32 text-gray-500 shrink-0">{label}</div>
       <div 
-        className={`${textColor} font-bold hover-glitch ${onClick ? 'cursor-pointer hover:underline decoration-dashed underline-offset-4' : ''}`}
+        className={`${textColor} font-bold hover-glitch truncate ${onClick ? 'cursor-pointer hover:underline decoration-dashed underline-offset-4' : ''}`}
         onClick={onClick}
       >
         {value}
@@ -292,7 +292,7 @@ function EasterEggPopup({ type, text, onClose }: { type: string, text: string, o
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-80 bg-[#111] border border-gray-700 shadow-2xl shadow-black font-mono text-xs"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[90vw] max-w-xs bg-[#111] border border-gray-700 shadow-2xl shadow-black font-mono text-[10px] md:text-xs"
     >
       <div className="bg-[#4ade80] text-black font-bold p-1.5 px-3 flex justify-between items-center tracking-widest">
         <span>{title}</span>

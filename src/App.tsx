@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Menu, X as CloseIcon } from 'lucide-react';
 import MatrixRain from './components/MatrixRain';
 import Worldview from './components/Worldview';
 import Roster from './components/Roster';
@@ -11,6 +11,7 @@ import BackgroundGraph from './components/BackgroundGraph';
 export default function App() {
   const [booting, setBooting] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,6 +19,11 @@ export default function App() {
     }, 2500);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setIsSidebarOpen(false);
+  };
 
   if (booting) {
     return <BootSequence />;
@@ -32,11 +38,29 @@ export default function App() {
       <div className="scanlines"></div>
       <div className="crt"></div>
 
-      <div className="relative z-10 flex h-screen">
-        {/* Sidebar Navigation */}
-        <nav className="w-64 border-r border-red-900/30 bg-black/80 backdrop-blur-md flex flex-col">
-          <div className="p-6 border-b border-red-900/30 flex flex-col items-center">
+      <div className="relative z-10 flex h-screen flex-col md:flex-row">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-red-900/30 bg-black/90 backdrop-blur-md z-30">
+          <img 
+            src="https://i.postimg.cc/C5bqBnFx/logo.png" 
+            alt="Black Over Logo" 
+            className="h-8 object-contain invert opacity-90"
+          />
+          <button 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="text-red-500 p-1 border border-red-900/30 rounded"
+          >
+            {isSidebarOpen ? <CloseIcon size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
 
+        {/* Sidebar Navigation */}
+        <nav className={`
+          fixed inset-y-0 left-0 z-40 w-64 border-r border-red-900/30 bg-black/95 backdrop-blur-md flex flex-col transition-transform duration-300 ease-in-out
+          md:relative md:translate-x-0
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
+          <div className="p-6 border-b border-red-900/30 flex flex-col items-center hidden md:flex">
             <img 
               src="https://i.postimg.cc/C5bqBnFx/logo.png" 
               alt="Black Over Logo" 
@@ -50,26 +74,26 @@ export default function App() {
           <div className="flex-1 py-6 flex flex-col gap-2 px-4">
             <NavButton 
               active={activeTab === 'overview'} 
-              onClick={() => setActiveTab('overview')}
+              onClick={() => handleTabChange('overview')}
               label="SYSTEM OVERVIEW"
             />
             <div className="my-2 border-t border-gray-800"></div>
             <div className="text-[10px] text-gray-600 mb-1 px-2 tracking-widest">OPERATIVE ROSTERS</div>
             <NavButton 
               active={activeTab === 'ALPHA'} 
-              onClick={() => setActiveTab('ALPHA')}
+              onClick={() => handleTabChange('ALPHA')}
               label="TEAM ALPHA"
               color="text-red-500"
             />
             <NavButton 
               active={activeTab === 'BETA'} 
-              onClick={() => setActiveTab('BETA')}
+              onClick={() => handleTabChange('BETA')}
               label="TEAM BETA"
               color="text-blue-500"
             />
             <NavButton 
               active={activeTab === 'SUPPORT'} 
-              onClick={() => setActiveTab('SUPPORT')}
+              onClick={() => handleTabChange('SUPPORT')}
               label="TEAM SUPPORT"
               color="text-green-500"
             />
@@ -81,6 +105,19 @@ export default function App() {
           </div>
         </nav>
 
+        {/* Overlay for mobile sidebar */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSidebarOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
+            />
+          )}
+        </AnimatePresence>
+
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto relative bg-black/60">
           <AnimatePresence mode="wait">
@@ -90,7 +127,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
               transition={{ duration: 0.3 }}
-              className="p-8 max-w-6xl mx-auto"
+              className="p-4 md:p-8 max-w-6xl mx-auto"
             >
               {activeTab === 'overview' ? (
                 <Worldview />
@@ -146,7 +183,7 @@ function BootSequence() {
   }, []);
 
   return (
-    <div className="h-screen w-screen bg-black text-green-500 font-mono p-8 flex flex-col justify-end pb-24">
+    <div className="h-screen w-screen bg-black text-green-500 font-mono p-4 md:p-8 flex flex-col justify-end pb-12 md:pb-24">
       <div className="scanlines"></div>
       <div className="max-w-2xl">
         {lines.map((line, i) => (

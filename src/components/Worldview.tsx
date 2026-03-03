@@ -74,19 +74,19 @@ export default function Worldview() {
 
   return (
     <div className="space-y-8 pb-12">
-      <header className="border-b border-red-900/50 pb-6 flex justify-between items-end">
+      <header className="border-b border-red-900/50 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h2 className="text-4xl font-display text-white tracking-tighter hover-glitch" data-text="BLACK OVER">BLACK OVER</h2>
+            <h2 className="text-3xl md:text-4xl font-display text-white tracking-tighter hover-glitch" data-text="BLACK OVER">BLACK OVER</h2>
           </div>
-          <p className="text-red-500/80 font-mono text-sm tracking-widest hover-glitch">PRIVATE MILITARY COMPANY // CLASSIFIED INTEL</p>
+          <p className="text-red-500/80 font-mono text-xs md:text-sm tracking-widest hover-glitch uppercase">Private Military Company // Classified Intel</p>
         </div>
-        <div className="text-right font-mono">
-          <div className="text-green-500 text-sm flex items-center gap-2 justify-end hover-glitch">
+        <div className="text-left md:text-right font-mono w-full md:w-auto">
+          <div className="text-green-500 text-xs md:text-sm flex items-center gap-2 justify-start md:justify-end hover-glitch">
             <Lock size={14} /> ACCESS GRANTED
           </div>
-          <div className="text-gray-500 text-xs mt-1 hover-glitch">SECURITY CLEARANCE: LEVEL 5</div>
-          <div className="text-gray-500 text-xs hover-glitch">ENCRYPTION: AES-256</div>
+          <div className="text-gray-500 text-[10px] md:text-xs mt-1 hover-glitch">SECURITY CLEARANCE: LEVEL 5</div>
+          <div className="text-gray-500 text-[10px] md:text-xs hover-glitch">ENCRYPTION: AES-256</div>
         </div>
       </header>
 
@@ -197,14 +197,14 @@ function ChatModal({ team, onClose }: { team: string, onClose: () => void }) {
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="relative w-full max-w-2xl h-[70vh] flex flex-col bg-[#050505] border border-green-900/50 shadow-2xl shadow-green-900/20 font-mono"
+        className="relative w-full max-w-2xl h-[80vh] md:h-[70vh] flex flex-col bg-[#050505] border border-green-900/50 shadow-2xl shadow-green-900/20 font-mono"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-3 border-b border-green-900/50 bg-green-950/20">
-          <div className="flex items-center gap-2 text-green-500">
-            <Terminal size={16} />
-            <span className="text-xs tracking-widest">SECURE INTRANET // {team} SQUAD CHAT</span>
-            <span className="text-[10px] bg-green-900/50 px-1 ml-2 animate-pulse">ENCRYPTED</span>
+        <div className="flex items-center justify-between p-3 border-b border-green-900/50 bg-green-950/20 shrink-0">
+          <div className="flex items-center gap-2 text-green-500 overflow-hidden">
+            <Terminal size={16} className="shrink-0" />
+            <span className="text-[10px] md:text-xs tracking-widest truncate">SECURE INTRANET // {team} SQUAD CHAT</span>
+            <span className="text-[8px] md:text-[10px] bg-green-900/50 px-1 ml-1 md:ml-2 animate-pulse shrink-0">ENCRYPTED</span>
           </div>
           <button onClick={onClose} className="text-green-600 hover:text-green-400">
             <X size={18} />
@@ -264,7 +264,7 @@ function SquadRow({ name, desc, color, text, onClick }: { name: string, desc: st
       className={`p-4 border ${color} bg-black/60 flex flex-col md:flex-row md:items-center gap-4 relative overflow-hidden box-glitch ${onClick ? 'cursor-pointer hover:bg-gray-900/80 transition-colors group' : ''}`}
     >
       <div className="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-gray-800/20 to-transparent pointer-events-none"></div>
-      <div className={`font-bold tracking-widest ${text} w-40 shrink-0 font-display text-lg hover-glitch group-hover:scale-105 transition-transform origin-left`} data-text={`[${name}]`}>[{name}]</div>
+      <div className={`font-bold tracking-widest ${text} w-full md:w-40 shrink-0 font-display text-lg hover-glitch group-hover:scale-105 transition-transform origin-left`} data-text={`[${name}]`}>[{name}]</div>
       <div className="text-sm text-gray-400 font-mono">{desc}</div>
     </div>
   );
@@ -320,7 +320,7 @@ function MillaModal({ onClose }: { onClose: () => void }) {
               </div>
 
               <div className="border-b-2 border-gray-700 pb-2 mb-4 relative z-10">
-                <h2 className="text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text="MILLA">MILLA</h2>
+                <h2 className="text-2xl md:text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text="MILLA">MILLA</h2>
               </div>
               
               <div className="grid grid-cols-1 gap-2 text-sm font-mono relative z-10">
@@ -398,9 +398,9 @@ function BiometricRow({ label, value }: { label: string, value: string }) {
 
 function InfoRow({ label, value, textColor = "text-gray-200" }: { label: string, value: string, textColor?: string }) {
   return (
-    <div className="flex border-b border-gray-800/50 py-1 hover:bg-gray-900/30 transition-colors">
-      <div className="w-32 text-gray-500">{label}</div>
-      <div className={`${textColor} font-bold hover-glitch`}>{value}</div>
+    <div className="flex border-b border-gray-800/50 py-1 hover:bg-gray-900/30 transition-colors text-[10px] md:text-sm">
+      <div className="w-24 md:w-32 text-gray-500 shrink-0">{label}</div>
+      <div className={`${textColor} font-bold hover-glitch truncate`}>{value}</div>
     </div>
   );
 }
