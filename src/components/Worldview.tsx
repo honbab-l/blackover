@@ -93,8 +93,9 @@ export default function Worldview() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InfoCard 
           icon={<Globe className="text-gray-400" />}
-          title="GLOBAL OPERATIONS"
-          content="Extensive operational reach including classified projects, special ops, military consulting, VIP protection, and covert transport. Frequent collaboration with allied intelligence agencies."
+          title="SERIES MAP"
+          content="블랙오버의 세계관과 인물을 공유하는 시리즈 전체를 한눈에 살펴보시려면 이곳을 클릭하세요. 시리즈 맵 아카이브로 이동합니다."
+          link="https://black-over-series.vercel.app/"
         />
         <InfoCard 
           icon={<Briefcase className="text-gray-400" />}
@@ -241,20 +242,30 @@ function ChatModal({ team, onClose }: { team: string, onClose: () => void }) {
   );
 }
 
-function InfoCard({ icon, title, content }: { icon: React.ReactNode, title: string, content: string }) {
-  return (
+function InfoCard({ icon, title, content, link }: { icon: React.ReactNode, title: string, content: string, link?: string }) {
+  const CardContent = (
     <motion.div 
       whileHover={{ scale: 1.02, backgroundColor: 'rgba(30, 0, 0, 0.2)' }}
-      className="p-5 border border-gray-800 bg-black/40 backdrop-blur-sm relative overflow-hidden group box-glitch"
+      className={`p-5 border border-gray-800 bg-black/40 backdrop-blur-sm relative overflow-hidden group box-glitch h-full ${link ? 'cursor-pointer' : ''}`}
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-gray-800 group-hover:bg-red-600 transition-colors"></div>
       <div className="flex items-center gap-3 mb-3">
         {icon}
         <h3 className="font-bold text-gray-200 tracking-wider text-sm hover-glitch">{title}</h3>
       </div>
-      <p className="text-sm text-gray-400 leading-relaxed font-mono">{content}</p>
+      <p className="text-sm text-gray-400 leading-relaxed font-mono font-korean">{content}</p>
     </motion.div>
   );
+
+  if (link) {
+    return (
+      <a href={link} target="_blank" rel="noopener noreferrer" className="block h-full">
+        {CardContent}
+      </a>
+    );
+  }
+
+  return CardContent;
 }
 
 function SquadRow({ name, desc, color, text, onClick }: { name: string, desc: string, color: string, text: string, onClick?: () => void }) {
