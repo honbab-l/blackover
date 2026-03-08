@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { agents } from '../data/agents';
-import { X, Activity, User, ShieldAlert, Crosshair } from 'lucide-react';
+import { X, Activity, User, ShieldAlert, Crosshair, Lock } from 'lucide-react';
 
 export default function Roster({ team }: { team: string }) {
   const teamAgents = agents.filter(a => a.team === team);
@@ -104,115 +104,121 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 md:p-8 flex flex-col gap-6 relative">
+        <div className="p-6 md:p-8 flex flex-col gap-6 relative min-h-[400px]">
           <div className="absolute inset-0 scanlines opacity-30 pointer-events-none"></div>
           
-          {/* Top Section: Info & Photo */}
-          <div className="flex flex-col md:flex-row gap-8 relative z-10">
-            
-            {/* Left: Info */}
-            <div className="flex-1 space-y-4 relative">
-              {/* Pentagon Stats Graphic (Moved to background of info) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-10 pointer-events-none z-0">
-                <svg className="absolute inset-0 w-full h-full animate-rotate-slow text-red-500" viewBox="0 0 100 100">
-                  <polygon points="50,5 95,38 78,95 22,95 5,38" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-                </svg>
-                <svg className="absolute inset-0 w-full h-full animate-rotate-slow-reverse text-red-500" viewBox="0 0 100 100">
-                  <polygon points="50,15 85,40 72,85 28,85 15,40" fill="none" stroke="currentColor" strokeWidth="1" />
-                  <line x1="50" y1="15" x2="50" y2="85" stroke="currentColor" strokeWidth="1" />
-                  <line x1="15" y1="40" x2="85" y2="40" stroke="currentColor" strokeWidth="1" />
-                </svg>
-              </div>
-
-              <div className="border-b-2 border-gray-700 pb-2 mb-4 relative z-10">
-                <h2 className="text-2xl md:text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text={agent.name}>{agent.name}</h2>
-              </div>
+          <div className="flex flex-col gap-6">
+            {/* Top Section: Info & Photo */}
+            <div className="flex flex-col md:flex-row gap-8 relative z-10">
               
-              <div className="grid grid-cols-1 gap-2 text-sm font-mono relative z-10">
-                <InfoRow label="FILE No" value={agent.designation} onClick={() => setActiveEasterEgg('fileNo')} />
-                <InfoRow label="CODENAME" value={agent.callsign} textColor={textColor} onClick={() => setActiveEasterEgg('codename')} />
-                <InfoRow label="LISTED AS" value={agent.role} />
-                <InfoRow label="POSITION" value={agent.position} />
-                <InfoRow label="CLEARANCE" value={agent.clearance} textColor="text-red-500" />
-                <InfoRow label="AGE" value={agent.age.toString()} />
-                <InfoRow label="DOB" value={agent.dob} />
-                <InfoRow label="NATIONALITY" value={agent.nationality} />
+              {/* Left: Info */}
+              <div className="flex-1 space-y-4 relative">
+                {/* Pentagon Stats Graphic (Moved to background of info) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 opacity-10 pointer-events-none z-0">
+                  <svg className="absolute inset-0 w-full h-full animate-rotate-slow text-red-500" viewBox="0 0 100 100">
+                    <polygon points="50,5 95,38 78,95 22,95 5,38" fill="none" stroke="currentColor" strokeWidth="2" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+                  </svg>
+                  <svg className="absolute inset-0 w-full h-full animate-rotate-slow-reverse text-red-500" viewBox="0 0 100 100">
+                    <polygon points="50,15 85,40 72,85 28,85 15,40" fill="none" stroke="currentColor" strokeWidth="1" />
+                    <line x1="50" y1="15" x2="50" y2="85" stroke="currentColor" strokeWidth="1" />
+                    <line x1="15" y1="40" x2="85" y2="40" stroke="currentColor" strokeWidth="1" />
+                  </svg>
+                </div>
+
+                <div className="border-b-2 border-gray-700 pb-2 mb-4 relative z-10">
+                  <h2 className="text-2xl md:text-4xl font-display text-white uppercase tracking-tight hover-glitch" data-text={agent.name}>{agent.name}</h2>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-2 text-sm font-mono relative z-10">
+                  <InfoRow label="FILE No" value={agent.designation} onClick={() => setActiveEasterEgg('fileNo')} />
+                  <InfoRow label="CODENAME" value={agent.callsign} textColor={textColor} onClick={() => setActiveEasterEgg('codename')} />
+                  <InfoRow label="LISTED AS" value={agent.role} />
+                  <InfoRow label="POSITION" value={agent.position} />
+                  <div className="flex border-b border-gray-800/50 py-1 hover:bg-gray-900/30 transition-colors text-[10px] md:text-sm">
+                    <div className="w-24 md:w-32 text-gray-500 shrink-0">CLEARANCE</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-500 font-bold">{agent.clearance}</span>
+                    </div>
+                  </div>
+                  <InfoRow label="AGE" value={agent.age.toString()} />
+                  <InfoRow label="DOB" value={agent.dob} />
+                  <InfoRow label="NATIONALITY" value={agent.nationality} />
+                </div>
+              </div>
+
+              {/* Right: Photo */}
+              <div className="w-full md:w-64 shrink-0">
+                <div 
+                  className="aspect-[3/4] bg-gray-900 border-2 border-gray-700 relative overflow-hidden flex items-center justify-center group box-glitch cursor-pointer"
+                  onClick={() => setActiveEasterEgg('photo')}
+                >
+                  <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/static/400/600?grayscale')] opacity-30 mix-blend-overlay"></div>
+                  <div className="absolute inset-0 scanlines opacity-50"></div>
+                  {agent.image ? (
+                    <img 
+                      src={agent.image} 
+                      alt={agent.name} 
+                      className="w-full h-full object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <User size={64} className="text-gray-700" />
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Right: Photo */}
-            <div className="w-full md:w-64 shrink-0">
-              <div 
-                className="aspect-[3/4] bg-gray-900 border-2 border-gray-700 relative overflow-hidden flex items-center justify-center group box-glitch cursor-pointer"
-                onClick={() => setActiveEasterEgg('photo')}
-              >
-                <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/static/400/600?grayscale')] opacity-30 mix-blend-overlay"></div>
-                <div className="absolute inset-0 scanlines opacity-50"></div>
-                {agent.image ? (
-                  <img 
-                    src={agent.image} 
-                    alt={agent.name} 
-                    className="w-full h-full object-cover relative z-10 grayscale hover:grayscale-0 transition-all duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <User size={64} className="text-gray-700" />
-                )}
+            {/* Middle Section: BIOMETRICS */}
+            <div className="relative z-10 box-glitch">
+              <div className="bg-gray-200 text-black font-display text-center py-1 mb-4 tracking-widest">
+                BIOMETRICS
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm font-mono border border-gray-800 p-4 bg-black/50">
+                {/* Left Column */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">HEIGHT</div>
+                    <div className="text-gray-200 hover-glitch font-bold">{agent.stats.height}</div>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">WEIGHT</div>
+                    <div className="text-gray-200 hover-glitch font-bold">{agent.stats.weight}</div>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">VISION</div>
+                    <div className="text-gray-200 hover-glitch font-bold">{agent.stats.vision}</div>
+                  </div>
+                </div>
+                {/* Right Column */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">BLOOD TYPE</div>
+                    <div className="text-gray-200 hover-glitch font-bold">{agent.stats.blood}</div>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">FOOT SIZE</div>
+                    <div className="text-gray-200 hover-glitch font-bold">{agent.stats.footSize}</div>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
+                    <div className="text-gray-500 text-[10px]">SMOKING</div>
+                    <div className="text-gray-200 hover-glitch font-bold uppercase">{agent.stats.smoking}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Section: INFORMATION */}
+            <div className="relative z-10 box-glitch">
+              <div className="bg-gray-200 text-black font-display text-center py-1 mb-4 tracking-widest">
+                INFORMATION
+              </div>
+              <div className="border border-gray-800 p-4 bg-black/50 space-y-4 text-sm font-mono text-gray-300 leading-relaxed">
+                <p><span className="text-gray-500">PRIMARY ARMAMENT:</span> {agent.outside}</p>
+                <div className="font-korean whitespace-pre-wrap"><span className="text-gray-500 font-mono block mb-2">NOTES:</span>{agent.notes}</div>
               </div>
             </div>
           </div>
-
-          {/* Middle Section: BIOMETRICS */}
-          <div className="relative z-10 box-glitch">
-            <div className="bg-gray-200 text-black font-display text-center py-1 mb-4 tracking-widest">
-              BIOMETRICS
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm font-mono border border-gray-800 p-4 bg-black/50">
-              {/* Left Column */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">HEIGHT</div>
-                  <div className="text-gray-200 hover-glitch font-bold">{agent.stats.height}</div>
-                </div>
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">WEIGHT</div>
-                  <div className="text-gray-200 hover-glitch font-bold">{agent.stats.weight}</div>
-                </div>
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">VISION</div>
-                  <div className="text-gray-200 hover-glitch font-bold">{agent.stats.vision}</div>
-                </div>
-              </div>
-              {/* Right Column */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">BLOOD TYPE</div>
-                  <div className="text-gray-200 hover-glitch font-bold">{agent.stats.blood}</div>
-                </div>
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">FOOT SIZE</div>
-                  <div className="text-gray-200 hover-glitch font-bold">{agent.stats.footSize}</div>
-                </div>
-                <div className="flex justify-between items-center border-b border-gray-800/50 pb-1">
-                  <div className="text-gray-500 text-[10px]">SMOKING</div>
-                  <div className="text-gray-200 hover-glitch font-bold uppercase">{agent.stats.smoking}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Section: INFORMATION */}
-          <div className="relative z-10 box-glitch">
-            <div className="bg-gray-200 text-black font-display text-center py-1 mb-4 tracking-widest">
-              INFORMATION
-            </div>
-            <div className="border border-gray-800 p-4 bg-black/50 space-y-4 text-sm font-mono text-gray-300 leading-relaxed">
-              <p><span className="text-gray-500">PRIMARY ARMAMENT:</span> {agent.outside}</p>
-              <div className="font-korean whitespace-pre-wrap"><span className="text-gray-500 font-mono block mb-2">NOTES:</span>{agent.notes}</div>
-            </div>
-          </div>
-
         </div>
       </motion.div>
 

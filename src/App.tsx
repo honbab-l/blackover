@@ -97,6 +97,16 @@ export default function App() {
               label="TEAM SUPPORT"
               color="text-green-500"
             />
+            <div className="my-2 border-t border-gray-800"></div>
+            <a 
+              href="https://black-over-series.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200 text-left relative group box-glitch hover:bg-gray-900/50 text-gray-400 border-l-2 border-transparent"
+            >
+              <span className="tracking-wider hover-glitch group-hover:text-gray-300">[SERIES MAP]</span>
+              <ChevronRight size={14} className="absolute right-2 text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
           </div>
 
           <div className="p-4 border-t border-red-900/30 text-[10px] text-gray-600 flex justify-between items-center">

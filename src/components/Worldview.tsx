@@ -93,14 +93,19 @@ export default function Worldview() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InfoCard 
           icon={<Globe className="text-gray-400" />}
-          title="SERIES MAP"
-          content="블랙오버의 세계관과 인물을 공유하는 시리즈 전체를 한눈에 살펴보시려면 이곳을 클릭하세요. 시리즈 맵 아카이브로 이동합니다."
-          link="https://black-over-series.vercel.app/"
+          title="PAGE GUIDE"
+          content={`블랙오버 세계관을 소개하는 페이지입니다.
+
+<span class="text-red-500 mr-2">»</span> 메뉴의 각 팀 명을 클릭하시면 소속 요원의 개인 프로필을 열람하실 수 있습니다.
+
+<span class="text-red-500 mr-2">»</span> 메뉴의 SERIES MAP을 클릭하시면 블랙오버 세계관의 모든 작품 링크들이 한눈에 보기 좋게 정리된 페이지로 이동합니다.
+
+<span class="text-red-500 mr-2">»</span> 이 외에도 이곳저곳 클릭해보시면 이스터에그가 나타납니다.`}
         />
         <InfoCard 
           icon={<Briefcase className="text-gray-400" />}
           title="ORGANIZATION STATUS"
-          content="Tier-1 Private Military Company. Unmatched in the industry. Possesses an independent, highly classified intelligence network."
+          content="Tier-1 Private Military Company. Unmatched in the industry. Possesses an independent, highly classified intelligence network. Extensive operational reach including classified projects, special ops, military consulting, VIP protection, and covert transport. Frequent collaboration with allied intelligence agencies."
         />
       </div>
 
@@ -253,7 +258,10 @@ function InfoCard({ icon, title, content, link }: { icon: React.ReactNode, title
         {icon}
         <h3 className="font-bold text-gray-200 tracking-wider text-sm hover-glitch">{title}</h3>
       </div>
-      <p className="text-sm text-gray-400 leading-relaxed font-mono font-korean">{content}</p>
+      <div 
+        className="text-sm text-gray-400 leading-relaxed font-mono font-korean whitespace-pre-wrap"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </motion.div>
   );
 
