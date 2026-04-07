@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { agents } from '../data/agents';
 import { X, Activity, User, ShieldAlert, Crosshair, Lock } from 'lucide-react';
 
+const COMMON_ID_CARD_BACK = 'https://i.postimg.cc/pX413SY0/2.png';
+
 export default function Roster({ team }: { team: string }) {
   const teamAgents = agents.filter(a => a.team === team);
   const [selectedAgent, setSelectedAgent] = useState<typeof agents[0] | null>(null);
@@ -76,6 +78,9 @@ export default function Roster({ team }: { team: string }) {
 
 function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], onClose: () => void, textColor: string }) {
   const [activeEasterEgg, setActiveEasterEgg] = useState<string | null>(null);
+  const [showIdCard, setShowIdCard] = useState(false);
+  const [isIdCardFlipped, setIsIdCardFlipped] = useState(false);
+  const [showFingerprint, setShowFingerprint] = useState(false);
 
   return (
     <motion.div 
@@ -144,6 +149,37 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
                   <InfoRow label="AGE" value={agent.age.toString()} />
                   <InfoRow label="DOB" value={agent.dob} />
                   <InfoRow label="NATIONALITY" value={agent.nationality} />
+                </div>
+
+                {/* New Section: Signature & ID / Fingerprint */}
+                <div className="mt-6 border-t border-gray-800/50 pt-4 relative z-10">
+                  <div className="text-gray-500 text-[10px] mb-2 font-mono">SIGNATURE</div>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-[250px] h-[100px] bg-gray-900/30 border border-gray-800 flex items-center justify-center overflow-hidden shrink-0">
+                      {agent.signature ? (
+                        <img src={agent.signature} alt="Signature" className="w-full h-full object-contain invert opacity-80" />
+                      ) : (
+                        <span className="text-gray-700 text-xs font-mono">NO SIGNATURE ON FILE</span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col justify-between font-mono w-full h-[100px]">
+                      <button 
+                        onClick={() => setShowIdCard(true)} 
+                        className="h-[46px] bg-gray-900/40 border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs px-4 flex items-center justify-between group transition-colors"
+                      >
+                        <span>CERTIFICATE OF IDENTITY</span>
+                        <span className="text-red-500 group-hover:animate-pulse">VIEW [▶]</span>
+                      </button>
+                      <button 
+                        onClick={() => setShowFingerprint(true)} 
+                        className="h-[46px] bg-gray-900/40 border border-gray-700 hover:bg-gray-800 text-gray-300 text-xs px-4 flex items-center justify-between group transition-colors"
+                      >
+                        <span>FINGERPRINT</span>
+                        <span className="text-green-500 group-hover:animate-pulse">SCAN [▶]</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -229,6 +265,81 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
             text={agent.easterEggs[activeEasterEgg as keyof typeof agent.easterEggs]} 
             onClose={() => setActiveEasterEgg(null)} 
           />
+        )}
+      </AnimatePresence>
+
+      {/* ID Card Popup */}
+      <AnimatePresence>
+        {showIdCard && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+          >
+            <div 
+              className="absolute inset-0" 
+              onClick={() => { 
+                setShowIdCard(false); 
+                setTimeout(() => setIsIdCardFlipped(false), 300); 
+              }}
+            ></div>
+            
+            <div 
+              className="relative w-full max-w-sm aspect-[2/3] cursor-pointer"
+              style={{ perspective: '1000px' }}
+              onClick={() => {
+                if (!isIdCardFlipped) setIsIdCardFlipped(true);
+                else {
+                  setShowIdCard(false);
+                  setTimeout(() => setIsIdCardFlipped(false), 300);
+                }
+              }}
+            >
+              <motion.div
+                className="w-full h-full relative preserve-3d transition-transform duration-700"
+                animate={{ rotateY: isIdCardFlipped ? 180 : 0 }}
+                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+              >
+                {/* Front (Back of the card, visible initially) */}
+                <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden border border-gray-700 shadow-2xl shadow-black">
+                  <img src={COMMON_ID_CARD_BACK} alt="ID Card Back" className="w-full h-full object-cover" />
+                </div>
+                
+                {/* Back (Front of the card with agent info, visible after flip) */}
+                <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-xl overflow-hidden border border-gray-700 shadow-2xl shadow-black">
+                  <img src={agent.idCardFront} alt="ID Card Front" className="w-full h-full object-cover" />
+                </div>
+              </motion.div>
+            </div>
+            <div className="absolute bottom-8 text-gray-500 font-mono text-xs animate-pulse pointer-events-none">
+              {isIdCardFlipped ? "CLICK TO CLOSE" : "CLICK TO FLIP"}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fingerprint Popup */}
+      <AnimatePresence>
+        {showFingerprint && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+            onClick={() => setShowFingerprint(false)}
+          >
+            <div className="relative w-full max-w-xs aspect-[3/4] border border-green-500/30 bg-black overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(0,255,0,0.1)] cursor-pointer">
+              <img src={agent.fingerprint} alt="Fingerprint" className="w-full h-full object-contain invert opacity-80" />
+              
+              {/* Scanline */}
+              <div className="absolute left-0 right-0 h-1 bg-green-500 shadow-[0_0_15px_rgba(0,255,0,0.8)] animate-scan-vertical"></div>
+              <div className="absolute inset-0 bg-green-500/5 mix-blend-overlay pointer-events-none"></div>
+            </div>
+            <div className="absolute bottom-8 text-green-500/50 font-mono text-xs animate-pulse pointer-events-none">
+              SCANNING... CLICK ANYWHERE TO CLOSE
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.div>
