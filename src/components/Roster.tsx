@@ -16,100 +16,103 @@ export default function Roster({ team }: { team: string }) {
   const textColor = team === 'ALPHA' ? 'text-red-500' : team === 'BETA' ? 'text-blue-500' : 'text-green-500';
 
   return (
-    <div className="pb-12">
-      <header className="border-b border-gray-800 pb-6 mb-8">
-        <h2 className={`text-2xl md:text-3xl font-bold tracking-widest ${textColor} hover-glitch font-display`} data-text={`${team} TEAM`}>
-          {team} TEAM
-        </h2>
-        <p className="text-gray-500 font-mono text-[10px] md:text-sm mt-1 hover-glitch uppercase">Authorized Personnel Only // Level 5 Clearance Required</p>
-      </header>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {teamAgents.map((agent, idx) => (
+    <div className="pb-12 min-h-[600px]">
+      <AnimatePresence mode="wait">
+        {!selectedAgent ? (
           <motion.div
-            key={agent.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            onClick={() => setSelectedAgent(agent)}
-            className={`cursor-pointer group relative overflow-hidden bg-gradient-to-br from-gray-900 to-black border border-gray-800 hover:border-gray-500 transition-colors box-glitch`}
+            key="roster-list"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className={`absolute top-0 left-0 w-1 h-full ${teamColor.split(' ')[1]} group-hover:bg-opacity-100 transition-all`}></div>
-            
-            <div className="relative z-20 p-5 flex items-start gap-4">
-              <div className="w-16 h-16 bg-gray-800 border border-gray-700 flex items-center justify-center shrink-0 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/noise/100/100?grayscale')] opacity-20 mix-blend-overlay"></div>
-                {agent.image ? (
-                  <img 
-                    src={agent.image} 
-                    alt={agent.name} 
-                    className="w-full h-full object-cover relative z-10 grayscale group-hover:grayscale-0 transition-all"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <User size={32} className="text-gray-600 group-hover:text-gray-300 transition-colors relative z-10" />
-                )}
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-200 group-hover:text-white font-display tracking-wide uppercase hover-glitch" data-text={`[${agent.designation}] ${agent.callsign}`}>[{agent.designation}] {agent.callsign}</h3>
-                    <p className="text-xs text-gray-500 font-mono uppercase">{agent.name}</p>
+            <header className="border-b border-gray-800 pb-6 mb-8">
+              <h2 className={`text-2xl md:text-3xl font-bold tracking-widest ${textColor} hover-glitch font-display`} data-text={`${team} TEAM`}>
+                {team} TEAM
+              </h2>
+              <p className="text-gray-500 font-mono text-[10px] md:text-sm mt-1 hover-glitch uppercase">Authorized Personnel Only // Level 5 Clearance Required</p>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {teamAgents.map((agent, idx) => (
+                <motion.div
+                  key={agent.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  onClick={() => setSelectedAgent(agent)}
+                  className={`cursor-pointer group relative overflow-hidden bg-gradient-to-br from-gray-900 to-black border border-gray-800 hover:border-gray-500 transition-colors box-glitch`}
+                >
+                  <div className={`absolute top-0 left-0 w-1 h-full ${teamColor.split(' ')[1]} group-hover:bg-opacity-100 transition-all`}></div>
+                  
+                  <div className="relative z-20 p-5 flex items-start gap-4">
+                    <div className="w-16 h-16 bg-gray-800 border border-gray-700 flex items-center justify-center shrink-0 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-[url('https://picsum.photos/seed/noise/100/100?grayscale')] opacity-20 mix-blend-overlay"></div>
+                      {agent.image ? (
+                        <img 
+                          src={agent.image} 
+                          alt={agent.name} 
+                          className="w-full h-full object-cover relative z-10 grayscale group-hover:grayscale-0 transition-all"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <User size={32} className="text-gray-600 group-hover:text-gray-300 transition-colors relative z-10" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-200 group-hover:text-white font-display tracking-wide uppercase hover-glitch" data-text={`[${agent.designation}] ${agent.callsign}`}>[{agent.designation}] {agent.callsign}</h3>
+                          <p className="text-xs text-gray-500 font-mono uppercase">{agent.name}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex gap-3 text-xs text-gray-400 font-mono">
+                        <span className="flex items-center gap-1"><Crosshair size={12}/> {agent.position}</span>
+                        <span className="flex items-center gap-1"><Activity size={12}/> AGE: {agent.age}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-3 flex gap-3 text-xs text-gray-400 font-mono">
-                  <span className="flex items-center gap-1"><Crosshair size={12}/> {agent.position}</span>
-                  <span className="flex items-center gap-1"><Activity size={12}/> AGE: {agent.age}</span>
-                </div>
-              </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
-        ))}
-      </div>
-
-      <AnimatePresence>
-        {selectedAgent && (
-          <AgentModal agent={selectedAgent} onClose={() => setSelectedAgent(null)} textColor={textColor} />
+        ) : (
+          <motion.div
+            key="agent-detail"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <AgentDetail agent={selectedAgent} onBack={() => setSelectedAgent(null)} textColor={textColor} />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 }
 
-function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], onClose: () => void, textColor: string }) {
+function AgentDetail({ agent, onBack, textColor }: { agent: typeof agents[0], onBack: () => void, textColor: string }) {
   const [activeEasterEgg, setActiveEasterEgg] = useState<string | null>(null);
   const [showIdCard, setShowIdCard] = useState(false);
   const [isIdCardFlipped, setIsIdCardFlipped] = useState(false);
   const [showFingerprint, setShowFingerprint] = useState(false);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-sm"
-    >
-      <div className="absolute inset-0" onClick={onClose}></div>
-      
-      <motion.div 
-        initial={{ scale: 0.95, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.95, y: 20 }}
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border border-gray-700 shadow-2xl shadow-black flex flex-col"
-      >
-        {/* Modal Header */}
-        <div className="sticky top-0 z-30 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <ShieldAlert className={textColor} size={20} />
-            <span className="font-mono text-xs tracking-widest text-gray-400 hover-glitch">CLASSIFIED DOSSIER</span>
-          </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
-            <X size={24} />
-          </button>
+    <div className="relative w-full bg-[#0a0a0a] border border-gray-700 shadow-2xl shadow-black flex flex-col">
+      {/* Header */}
+      <div className="sticky top-0 z-30 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <ShieldAlert className={textColor} size={20} />
+          <span className="font-mono text-xs tracking-widest text-gray-400 hover-glitch">CLASSIFIED DOSSIER</span>
         </div>
+        <button onClick={onBack} className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 font-mono text-sm tracking-widest border border-gray-700 px-4 py-1.5 bg-gray-900/50 hover:bg-gray-800 group">
+          <span className="group-hover:-translate-x-1 transition-transform">◀</span> BACK
+        </button>
+      </div>
 
-        {/* Modal Content */}
-        <div className="p-6 md:p-8 flex flex-col gap-6 relative min-h-[400px]">
+      {/* Content */}
+      <div className="p-6 md:p-8 flex flex-col gap-6 relative min-h-[400px]">
           <div className="absolute inset-0 scanlines opacity-30 pointer-events-none"></div>
           
           <div className="flex flex-col gap-6">
@@ -256,7 +259,6 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
             </div>
           </div>
         </div>
-      </motion.div>
 
       <AnimatePresence>
         {activeEasterEgg && (
@@ -342,7 +344,7 @@ function AgentModal({ agent, onClose, textColor }: { agent: typeof agents[0], on
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
