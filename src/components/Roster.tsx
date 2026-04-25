@@ -279,7 +279,11 @@ function AgentDetail({ agent, onBack, textColor }: { agent: typeof agents[0], on
                   </div>
                   <div>
                     <h4 className="text-gray-400 font-bold mb-1 font-mono">[디테일]</h4>
-                    <p className="text-gray-300">혈액형, 발사이즈, 시력, 체지방률, 체질, 건강상태, 식습관, 수면습관, 아플때 모습, 자기관리, 아침루틴, 수면전 루틴, 운동루틴, 버릇, 약점, 트라우마, 종교관, 주요 소지품, 차량, 운전스타일, 휴대폰, 연락스타일, 이상형, 과거 연애경험, 필체, 요리실력, 거주지, 사유지, 재산규모, 재산관리, 소비철학, 패션감각, 호불호, 주량, 술취향, 술버릇, 취미, 특기, 흡연여부, 양손잡이 여부, 침대에서 특징, 성향, 취향, 그 외의 10여개의 일상 속 TMI</p>
+                    <p className="inline text-gray-300">혈액형, 발사이즈, 시력, 체지방률, 체질, 건강상태, 식습관, 수면습관, 아플때 모습, 자기관리, 아침루틴, 수면전 루틴, 운동루틴, 버릇, 약점, 트라우마, 종교관, 주요 소지품, 차량, 운전스타일, 휴대폰, 연락스타일, 이상형, 과거 연애경험, 필체, 요리실력, 거주지, 사유지, 재산규모, 재산관리, 소비철학, 패션감각, 호불호, 주량, 술취향, 술버릇, 취미, 특기, 흡연여부, 양손잡이 여부, 침대에서 특징, 성향, 취향, 그 외의 10여개의 일상 속 TMI, </p>
+                    <span 
+                      className="inline-block text-red-500 font-bold cursor-pointer hover:animate-shake hover:text-red-400 transition-all ml-1"
+                      onClick={() => setActiveEasterEgg('virginity')}
+                    >동정여부?</span>
                   </div>
                 </div>
               </div>
@@ -291,7 +295,8 @@ function AgentDetail({ agent, onBack, textColor }: { agent: typeof agents[0], on
         {activeEasterEgg && (
           <EasterEggPopup 
             type={activeEasterEgg} 
-            text={agent.easterEggs[activeEasterEgg as keyof typeof agent.easterEggs]} 
+            text={activeEasterEgg !== 'virginity' ? agent.easterEggs[activeEasterEgg as keyof typeof agent.easterEggs] : undefined} 
+            agentId={agent.id}
             onClose={() => setActiveEasterEgg(null)} 
           />
         )}
@@ -389,9 +394,11 @@ function InfoRow({ label, value, textColor = "text-gray-200", onClick }: { label
   );
 }
 
-function EasterEggPopup({ type, text, onClose }: { type: string, text: string, onClose: () => void }) {
+function EasterEggPopup({ type, text, agentId, onClose }: { type: string, text?: string, agentId?: string, onClose: () => void }) {
   let title = "SYSTEM QUERY";
   let content = null;
+  let mainText = text;
+  let subText = null;
 
   if (type === 'fileNo') {
     title = "DATABASE ACCESS";
@@ -431,6 +438,30 @@ function EasterEggPopup({ type, text, onClose }: { type: string, text: string, o
         </div>
       </div>
     );
+  } else if (type === 'virginity') {
+    title = "CLASSIFIED DETAIL";
+    content = (
+      <div className="space-y-2">
+        <div className="flex gap-2"><span className="text-red-500">▶</span> ACCESSING RESTRICTED DATA</div>
+        <div className="pl-4 text-gray-400">▼ DECRYPTING PERSONAL RECORDS</div>
+        <div className="bg-red-500/20 text-red-400 p-1 pl-4 border-l-2 border-red-500">
+          ▼ CLEARANCE OVERRIDE ACCEPTED
+        </div>
+      </div>
+    );
+    
+    if (['max', 'colin'].includes(agentId || '')) {
+      mainText = '이 남자는 동정입니다.';
+    } else if (['asher', 'eric', 'nathan', 'joshua'].includes(agentId || '')) {
+      mainText = '이 남자는 동정이 아닙니다. 누구보다 빨리 뗐습니다......';
+      subText = '※다만, 본 내용은 1:1챗에만 들어있는 공식 설정이므로 다인 시뮬레이션에서 AI가 동정이라고 날조하는 경우가 있음을 알려드립니다.';
+    } else if (['oscar'].includes(agentId || '')) {
+      mainText = '설마 동정일 거라고 생각하신 건 아니죠....?';
+      subText = '※본 내용은 1:1챗에만 들어있는 공식 설정인데, 다인 시뮬레이션에서 AI조차 오스카를 동정으로 날조해준건 보지 못했습니다.';
+    } else if (['vincent', 'raul', 'isaac', 'blake', 'jay'].includes(agentId || '')) {
+      mainText = '이 남자는 동정이 아닙니다. 적당히 경험이 있습니다.';
+      subText = '※다만, 본 내용은 1:1챗에만 들어있는 공식 설정이므로 다인 시뮬레이션에서 AI가 동정이라고 날조하는 경우가 있음을 알려드립니다.';
+    }
   }
 
   return (
@@ -440,14 +471,15 @@ function EasterEggPopup({ type, text, onClose }: { type: string, text: string, o
       exit={{ opacity: 0, scale: 0.9 }}
       className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[90vw] max-w-xs bg-[#111] border border-gray-700 shadow-2xl shadow-black font-mono text-[10px] md:text-xs"
     >
-      <div className="bg-[#4ade80] text-black font-bold p-1.5 px-3 flex justify-between items-center tracking-widest">
+      <div className={`text-black font-bold p-1.5 px-3 flex justify-between items-center tracking-widest ${type === 'virginity' ? 'bg-[#ef4444]' : 'bg-[#4ade80]'}`}>
         <span>{title}</span>
         <button onClick={onClose} className="hover:text-white transition-colors"><X size={14}/></button>
       </div>
       <div className="p-4 text-gray-300 space-y-4">
         <div>{content}</div>
-        <div className="border-t border-gray-700 pt-3 mt-2 text-gray-400 font-korean leading-relaxed">
-          {text}
+        <div className={`border-t border-gray-700 pt-3 mt-2 font-korean leading-relaxed ${type === 'virginity' ? 'text-gray-200' : 'text-gray-400'}`}>
+          <p>{mainText}</p>
+          {subText && <p className="text-gray-500 mt-2 text-[10px] whitespace-pre-wrap leading-tight">{subText}</p>}
         </div>
       </div>
     </motion.div>

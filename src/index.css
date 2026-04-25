@@ -188,3 +188,13 @@ body {
 .animate-scan-vertical {
   animation: scan-vertical 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px) rotate(-1deg); }
+  50% { transform: translateX(2px) rotate(1deg); }
+  75% { transform: translateX(-2px) rotate(-1deg); }
+}
+.animate-shake {
+  animation: shake 0.3s ease-in-out infinite;
+}
