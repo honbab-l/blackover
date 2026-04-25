@@ -257,6 +257,33 @@ function AgentDetail({ agent, onBack, textColor }: { agent: typeof agents[0], on
                 <div className="font-korean whitespace-pre-wrap"><span className="text-gray-500 font-mono block mb-2">NOTES:</span>{agent.notes}</div>
               </div>
             </div>
+
+            {/* Official Database Section */}
+            <div className="relative z-10 box-glitch">
+              <div className="bg-gray-200 text-black font-display text-center py-1 mb-4 tracking-widest uppercase">
+                OFFICIAL DATABASE
+              </div>
+              <div className="border border-gray-800 p-4 bg-black/50 space-y-4 text-sm font-korean text-gray-300 leading-relaxed">
+                <p className="text-gray-400 text-xs mb-4 border-b border-gray-800/50 pb-4">
+                  아래의 데이터 키워드는 (1:1개인챗 기준) 제작자가 프롬프트에 기재한 '공식 설정'입니다. 여기에 기재되지 않은 정보는 AI가 생성한 결과물일 수 있습니다.
+                </p>
+                
+                <div className="space-y-6 text-sm">
+                  <div>
+                    <h4 className="text-gray-400 font-bold mb-1 font-mono">[기본정보]</h4>
+                    <p className="text-gray-300">이름, 성별, 나이, 생일, 국적, 외모, 체향, 목소리, 과거사, 학력, 성격, 태도, 말투, 화법, 말버릇</p>
+                  </div>
+                  <div>
+                    <h4 className="text-gray-400 font-bold mb-1 font-mono">[직업관련]</h4>
+                    <p className="text-gray-300">경력, 주 무기, 작전포지션, 특기, 수행능력, 콜사인 유래</p>
+                  </div>
+                  <div>
+                    <h4 className="text-gray-400 font-bold mb-1 font-mono">[디테일]</h4>
+                    <p className="text-gray-300">혈액형, 발사이즈, 시력, 체지방률, 체질, 건강상태, 식습관, 수면습관, 아플때 모습, 자기관리, 아침루틴, 수면전 루틴, 운동루틴, 버릇, 약점, 트라우마, 종교관, 주요 소지품, 차량, 운전스타일, 휴대폰, 연락스타일, 이상형, 과거 연애경험, 필체, 요리실력, 거주지, 사유지, 재산규모, 재산관리, 소비철학, 패션감각, 호불호, 주량, 술취향, 술버릇, 취미, 특기, 흡연여부, 양손잡이 여부, 침대에서 특징, 성향, 취향, 그 외의 10여개의 일상 속 TMI</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

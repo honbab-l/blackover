@@ -7,6 +7,7 @@ import Roster from './components/Roster';
 import MouseTracker from './components/MouseTracker';
 import BackgroundData from './components/BackgroundData';
 import BackgroundGraph from './components/BackgroundGraph';
+import FanartGallery from './components/FanartGallery';
 
 export default function App() {
   const [booting, setBooting] = useState(true);
@@ -71,7 +72,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="flex-1 py-6 flex flex-col gap-2 px-4">
+          <div className="flex-1 py-6 flex flex-col gap-2 px-4 overflow-y-auto">
             <NavButton 
               active={activeTab === 'overview'} 
               onClick={() => handleTabChange('overview')}
@@ -107,6 +108,12 @@ export default function App() {
               <span className="tracking-wider hover-glitch group-hover:text-gray-300">[SERIES MAP]</span>
               <ChevronRight size={14} className="absolute right-2 text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
+            <NavButton 
+              active={activeTab === 'FAN ART'} 
+              onClick={() => handleTabChange('FAN ART')}
+              label="FAN ART"
+              color="text-[#d8b4e2]"
+            />
           </div>
 
           <div className="p-4 border-t border-red-900/30 text-[10px] text-gray-600 flex justify-between items-center">
@@ -141,6 +148,8 @@ export default function App() {
             >
               {activeTab === 'overview' ? (
                 <Worldview />
+              ) : activeTab === 'FAN ART' ? (
+                <FanartGallery />
               ) : (
                 <Roster team={activeTab} />
               )}
