@@ -47,18 +47,26 @@ export default function FanartGallery() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (idx % 10) * 0.05 }}
-                  onClick={() => setSelectedImage(item)}
-                  className="cursor-pointer group relative aspect-square bg-gray-900 border border-gray-800 hover:border-gray-500 transition-colors overflow-hidden box-glitch"
+                  onClick={() => item.imageUrl && setSelectedImage(item)}
+                  className={`group relative aspect-square bg-gray-900 border border-gray-800 transition-colors overflow-hidden ${item.imageUrl ? 'cursor-pointer hover:border-gray-500 box-glitch' : ''}`}
                 >
-                  <img 
-                    src={item.imageUrl} 
-                    alt={item.title} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 flex flex-col justify-end opacity-80 group-hover:opacity-100 transition-opacity">
-                    <span className="font-korean text-sm font-bold text-gray-200">{item.title}</span>
-                  </div>
+                  {item.imageUrl ? (
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-700 font-mono text-xs opacity-50 bg-[url('https://picsum.photos/seed/noise/100/100?grayscale')] mix-blend-overlay">
+                      [NO SIGNAL]
+                    </div>
+                  )}
+                  {item.imageUrl && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-4 flex flex-col justify-end opacity-80 group-hover:opacity-100 transition-opacity">
+                      <span className="font-korean text-sm font-bold text-gray-200">{item.title}</span>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
